@@ -34,38 +34,38 @@ class EditoraRepository
 
     public function create(Editora $editora): int
     {
-        $stmt = Database::getConnection()->prepare("INSERT INTO editoras (id_editora, nome, cidade, telefone) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$editora->id_editora, $editora->nome, $editora->cidade, $editora->telefone]);
+        $stmt = Database::getConnection()->prepare("INSERT INTO editoras (nome, cidade, telefone) VALUES (?, ?, ?)");
+        $stmt->execute([$editora->nome, $editora->cidade, $editora->telefone]);
         return (int)Database::getConnection()->lastInsertId();
     }
 
     public function update(Editora $editora): bool
     {
-        $stmt = Database::getConnection()->prepare("UPDATE editoras SET id_editora = ?, nome = ?, cidade = ?, telefone = ? WHERE id = ?");
-        return $stmt->execute([$editora->id_editora, $editora->nome, $editora->cidade, $editora->telefone]);
+        $stmt = Database::getConnection()->prepare("UPDATE editoras SET nome = ?, cidade = ?, telefone = ? WHERE id = ?");
+        return $stmt->execute([$editora->nome, $editora->cidade, $editora->telefone, $editora->id]);
     }
 
-    public function delete(int $id_editora): bool
+    public function delete(int $id): bool
     {
-        $stmt = Database::getConnection()->prepare("DELETE FROM categories WHERE id_editora = ?");
-        return $stmt->execute([$id_editora]);
+        $stmt = Database::getConnection()->prepare("DELETE FROM editoras WHERE id = ?");
+        return $stmt->execute([$id]);
     }
 
     public function findAll(): array
     {
-        $stmt = Database::getConnection()->prepare("SELECT * FROM editoras ORDER BY id_editora DESC");
+        $stmt = Database::getConnection()->prepare("SELECT * FROM editoras ORDER BY id DESC");
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
     public function getArray(): array
     {
-        $stmt = Database::getConnection()->prepare("SELECT * FROM editoras ORDER BY id_editora DESC");
+        $stmt = Database::getConnection()->prepare("SELECT * FROM editoras ORDER BY id DESC");
         $stmt->execute();
         $editoras = $stmt->fetchAll();
         $return = [];
         foreach ($editoras as $editora) {
-            $return[$editora['id_editora']] = $editora['nome'];
+            $return[$editora['id']] = $editora['nome'];
         }
         return $return;
     }

@@ -4,6 +4,7 @@ use App\Controllers\Admin\AdminController;
 use App\Controllers\Admin\CategoryController;
 use App\Controllers\Admin\ProductController;
 use App\Controllers\Admin\UserController;
+use App\Controllers\Admin\EditoraController;
 use App\Controllers\AuthController;
 use App\Controllers\SiteController;
 use App\Middleware\AuthMiddleware;
@@ -49,6 +50,16 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $rou
             $categories->addRoute('GET', '/edit', [CategoryController::class, 'edit']);
             $categories->addRoute('POST', '/update', [CategoryController::class, 'update']);
             $categories->addRoute('POST', '/delete', [CategoryController::class, 'delete']);
+        });
+
+        $group->addGroup('/editoras', function (FastRoute\RouteCollector $editoras) {
+            $editoras->addRoute('GET', '', [EditoraController::class, 'index']);
+            $editoras->addRoute('GET', '/create', [EditoraController::class, 'create']);
+            $editoras->addRoute('POST', '/store', [EditoraController::class, 'store']);
+            $editoras->addRoute('GET', '/show', [EditoraController::class, 'show']);
+            $editoras->addRoute('GET', '/edit', [EditoraController::class, 'edit']);
+            $editoras->addRoute('POST', '/update', [EditoraController::class, 'update']);
+            $editoras->addRoute('POST', '/delete', [EditoraController::class, 'delete']);
         });
 
         // Usuários

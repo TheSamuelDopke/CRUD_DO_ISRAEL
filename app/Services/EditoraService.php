@@ -7,21 +7,24 @@ class EditoraService {
     public function validate(array $data): array {
         $errors = [];
         $nome = trim($data['nome'] ?? '');
+        $cidade = trim($data['cidade'] ?? '');
+        $telefone = trim($data['telefone'] ?? '');
 
-        if ($name === '') $errors['name'] = 'Nome é obrigatório';
+        if ($nome === '') $errors['nome'] = 'Nome é obrigatório';
 
-        if ($name === '') $errors['name'] = 'Nome é obrigatório';
+        if ($cidade === '') $errors['cidade'] = 'Cidade é obrigatória';
 
-        if ($name === '') $errors['name'] = 'Nome é obrigatório';
+        if ($telefone === '') $errors['telefone'] = 'Telefone é obrigatório';
 
         return $errors;
     }
 
     public function make(array $data): Editora {
-        $name = trim($data['name'] ?? '');
-        $text = trim($data['text'] ?? '');
+        $nome = trim($data['nome'] ?? '');
+        $cidade = trim($data['cidade'] ?? '');
+        $telefone = trim($data['telefone'] ?? '');
         $id = isset($data['id']) ? (int)$data['id'] : null;
-        return new Editora($id, $name, $text);
+        return new Editora($id, $nome, $cidade, $telefone);
     }
 }
 
