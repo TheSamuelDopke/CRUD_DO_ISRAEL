@@ -1,49 +1,51 @@
-<?php $this->layout('layouts/admin', ['title' => 'Editar Produto']) ?>
+<?php $this->layout('layouts/admin', ['title' => 'Editar Livro']) ?>
 
 <?php $this->start('body') ?>
 <div class="card shadow-sm" id="formView">
-    <?php $this->insert('partials/admin/form/header', ['title' => 'Editar Produto']) ?>
+    <?php $this->insert('partials/admin/form/header', ['title' => 'Editar Livro']) ?>
     <div class="card-body">
-        <form method="post" action="/admin/products/update" enctype="multipart/form-data" class="">
-              <input type="hidden" name="id" value="<?= $this->e($product['id']) ?>">
+        <form method="post" action="/admin/livros/update" enctype="multipart/form-data" class="">
+              <input type="hidden" name="id" value="<?= $this->e($livro['id']) ?>">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="name" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Digite o nome"
-                           value="<?= $this->e(($product['name'] ?? '')) ?>" required>
-                    <?php if (!empty($errors['name'])): ?>
-                        <div class="text-danger"><?= $this->e($errors['name']) ?></div><?php endif; ?>
+                    <label for="titulo" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título"
+                           value="<?= $this->e(($livro['titulo'] ?? '')) ?>" required>
+                    <?php if (!empty($errors['titulo'])): ?>
+                        <div class="text-danger"><?= $this->e($errors['titulo']) ?></div><?php endif; ?>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="price" class="form-label">Preço</label>
-                    <input type="number" step="0.01" class="form-control" id="price" name="price"
-                           placeholder="Digite o preço" value="<?= $this->e(($product['price'] ?? '')) ?>" required>
-                    <?php if (!empty($errors['price'])): ?>
-                        <div class="text-danger"><?= $this->e($errors['price']) ?></div><?php endif; ?>
+                    <label for="ano_publicacao" class="form-label">Ano de publicação</label>
+                    <input type="number" step="0.01" class="form-control" id="ano_publicacao" name="ano_publicacao"
+                        placeholder="Digite o ano de publicação" value="<?= $this->e(($old['ano_publicacao'] ?? $livro['ano_publicacao'] ?? '')) ?>" required>
+                    <?php if (!empty($errors['ano_publicacao'])): ?>
+                        <div class="text-danger"><?= $this->e($errors['ano_publicacao']) ?></div><?php endif; ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="formFile" class="form-label">Imagem (JPEG, PNG, WEBP) — substituir atual</label>
-                    <?php if (!empty($product['image_path'])): ?>
-                        <img class="d-block img-thumbnail ratio ratio-1x1" style="max-height: 200px;max-width: 200px" src="<?= $this->e($product['image_path']) ?>" alt=""><br>
-                    <?php endif; ?>
-                    <input class="form-control" type="file" id="image" name="image" accept="image/*">
-                    <?php if (!empty($errors['image'])): ?>
-                        <div class="error"><?= $this->e($errors['image']) ?></div><?php endif; ?>
+                    <label for="genero" class="form-label">Gênero</label>
+                    <input type="text" class="form-control" id="genero" name="genero" placeholder="Digite o gênero"
+                        value="<?= $this->e(($old['genero'] ?? '')) ?>" required>
+                    <?php if (!empty($errors['genero'])): ?>
+                        <div class="text-danger"><?= $this->e($errors['genero']) ?></div><?php endif; ?>
                 </div>
                 <div class="col-md-6 mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="disponivel" name="disponivel"
+                            value="1" <?= !empty($old['disponivel']) ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="disponivel">
+                            Disponível
+                        </label>
+                    </div>
                 </div>
-            </div>
-
-            <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="editora_id" class="form-label">Editora</label>
                     <select class="form-select" id="editora_id" name="editora_id"  required>
                         <option value="">Selecione uma editora</option>
                         <?php foreach ($editoras as $editora): ?>
-                            <option value="<?= $editora['id'] ?>" <?= $this->e(($old['editora_id'] ?? $product['editora_id']) == $editora['id'] ? 'selected' : '') ?>>
-                                <?= $this->e($editora['name']) ?>
+                            <option value="<?= $editora['id'] ?>" <?= $this->e(($old['editora_id'] ?? $livro['editora_id']) == $editora['id'] ? 'selected' : '') ?>>
+                                <?= $this->e($editora['nome']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -62,7 +64,7 @@
                 <button type="reset" class="btn btn-secondary">
                     <i class="bi bi-x-lg"></i> Limpar
                 </button>
-                <a href="/admin/products" class="btn align-self-end">
+                <a href="/admin/livros" class="btn align-self-end">
                     <i class="bi bi-x-lg"></i> Cancelar
                 </a>
             </div>

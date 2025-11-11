@@ -7,16 +7,16 @@
         <form method="post" action="/admin/livros/store" enctype="multipart/form-data" class="">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="name" class="form-label">Nome</label>
+                    <label for="name" class="form-label">Título</label>
                     <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título"
-                        value="<?= $this->e(($old['genero'] ?? '')) ?>" required>
-                    <?php if (!empty($errors['genero'])): ?>
+                        value="<?= $this->e(($old['titulo'] ?? '')) ?>" required>
+                    <?php if (!empty($errors['titulo'])): ?>
                         <div class="text-danger"><?= $this->e($errors['titulo']) ?></div><?php endif; ?>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="ano_publicacao" class="form-label">Ano de publicação</label>
                     <input type="number" step="0.01" class="form-control" id="ano_publicacao" name="ano_publicacao"
-                        placeholder="Digite o preço" value="<?= $this->e(($old['ano_publicacao'] ?? '')) ?>" required>
+                        placeholder="Digite o ano de publicação" value="<?= $this->e(($old['ano_publicacao'] ?? '')) ?>" required>
                     <?php if (!empty($errors['ano_publicacao'])): ?>
                         <div class="text-danger"><?= $this->e($errors['ano_publicacao']) ?></div><?php endif; ?>
                 </div>
@@ -65,7 +65,7 @@
                 <button type="reset" class="btn btn-secondary">
                     <i class="bi bi-x-lg"></i> Limpar
                 </button>
-                <a href="/admin/products" class="btn align-self-end">
+                <a href="/admin/livros" class="btn align-self-end">
                     <i class="bi bi-x-lg"></i> Cancelar
                 </a>
             </div>

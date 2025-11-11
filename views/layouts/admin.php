@@ -184,9 +184,9 @@ $auth = AuthService::user();
                 <i class="bi bi-people"></i>
                 <span>Usuários</span>
             </a>
-            <a class="nav-link" href="/admin/products" data-page="products">
+            <a class="nav-link" href="/admin/livros" data-page="livros">
                 <i class="bi bi-box-seam"></i>
-                <span>Produtos</span>
+                <span>Livros</span>
             </a>
             <a class="nav-link" href="/admin/categories" data-page="categories">
                 <i class="bi bi-box-seam"></i>
