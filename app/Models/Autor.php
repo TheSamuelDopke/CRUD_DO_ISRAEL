@@ -4,7 +4,7 @@ namespace App\Models;
 
 class Autor
 {
-    public ?int $id_autor;
+    public ?int $id;
     public string $nome_autor;
     public string $data_nascimento;
 

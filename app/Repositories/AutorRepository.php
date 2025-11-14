@@ -10,14 +10,14 @@ class AutorRepository
 {
     public function countAll(): int
     {
-        $stmt = Database::getConnection()->query("SELECT COUNT(*) FROM categories");
+        $stmt = Database::getConnection()->query("SELECT COUNT(*) FROM autores");
         return (int)$stmt->fetchColumn();
     }
 
     public function paginate(int $page, int $perPage): array
     {
         $offset = ($page - 1) * $perPage;
-        $stmt = Database::getConnection()->prepare("SELECT * FROM categories ORDER BY id DESC LIMIT :limit OFFSET :offset");
+        $stmt = Database::getConnection()->prepare("SELECT * FROM autores ORDER BY id DESC LIMIT :limit OFFSET :offset");
         $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
@@ -26,46 +26,46 @@ class AutorRepository
 
     public function find(int $id): ?array
     {
-        $stmt = Database::getConnection()->prepare("SELECT * FROM categories WHERE id = ?");
+        $stmt = Database::getConnection()->prepare("SELECT * FROM autores WHERE id = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch();
         return $row ?: null;
     }
 
-    public function create(Category $category): int
+    public function create(Autor $autor): int
     {
-        $stmt = Database::getConnection()->prepare("INSERT INTO categories (name, text) VALUES (?, ?)");
-        $stmt->execute([$category->name, $category->text]);
+        $stmt = Database::getConnection()->prepare("INSERT INTO autores (nome_autor, data_nascimento, nacionalidade) VALUES (?, ?, ?)");
+        $stmt->execute([$autor->nome_autor, $autor->data_nascimento, $autor->nacionalidade]);
         return (int)Database::getConnection()->lastInsertId();
     }
 
-    public function update(Category $category): bool
+    public function update(Autor $autor): bool
     {
-        $stmt = Database::getConnection()->prepare("UPDATE categories SET name = ?, text = ? WHERE id = ?");
-        return $stmt->execute([$category->name, $category->text, $category->id]);
+        $stmt = Database::getConnection()->prepare("UPDATE autores SET nome_autor = ?, data_nascimento = ?, nacionalidade = ? WHERE id = ?");
+        return $stmt->execute([$autor->nome_autor, $autor->data_nascimento, $autor->nacionalidade, $autor->id]);
     }
 
     public function delete(int $id): bool
     {
-        $stmt = Database::getConnection()->prepare("DELETE FROM categories WHERE id = ?");
+        $stmt = Database::getConnection()->prepare("DELETE FROM autores WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
     public function findAll(): array
     {
-        $stmt = Database::getConnection()->prepare("SELECT * FROM categories ORDER BY id DESC");
+        $stmt = Database::getConnection()->prepare("SELECT * FROM autores ORDER BY id DESC");
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
     public function getArray(): array
     {
-        $stmt = Database::getConnection()->prepare("SELECT * FROM categories ORDER BY id DESC");
+        $stmt = Database::getConnection()->prepare("SELECT * FROM autores ORDER BY id DESC");
         $stmt->execute();
-        $categories = $stmt->fetchAll();
+        $autores = $stmt->fetchAll();
         $return = [];
-        foreach ($categories as $category) {
-            $return[$category['id']] = $category['name'];
+        foreach ($autores as $autor) {
+            $return[$autor['id']] = $autor['nome_autor'];
         }
         return $return;
     }

@@ -5,6 +5,8 @@ use App\Controllers\Admin\CategoryController;
 use App\Controllers\Admin\ProductController;
 use App\Controllers\Admin\UserController;
 use App\Controllers\AuthController;
+use App\Controllers\Admin\AutorController;
+use App\Controllers\Admin\EmprestimoController;
 use App\Controllers\SiteController;
 use App\Middleware\AuthMiddleware;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,6 +51,27 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $rou
             $categories->addRoute('GET', '/edit', [CategoryController::class, 'edit']);
             $categories->addRoute('POST', '/update', [CategoryController::class, 'update']);
             $categories->addRoute('POST', '/delete', [CategoryController::class, 'delete']);
+        });
+
+        // Autores
+        $group->addGroup('/autores', function (FastRoute\RouteCollector $autores) {
+            $autores->addRoute('GET', '', [AutorController::class, 'index']);
+            $autores->addRoute('GET', '/create', [AutorController::class, 'create']);
+            $autores->addRoute('POST', '/store', [AutorController::class, 'store']);
+            $autores->addRoute('GET', '/show', [AutorController::class, 'show']);
+            $autores->addRoute('GET', '/edit', [AutorController::class, 'edit']);
+            $autores->addRoute('POST', '/update', [AutorController::class, 'update']);
+            $autores->addRoute('POST', '/delete', [AutorController::class, 'delete']);
+        });
+
+        $group->addGroup('/emprestimos', function (FastRoute\RouteCollector $emprestimos) {
+            $emprestimos->addRoute('GET', '', [EmprestimoController::class, 'index']);
+            $emprestimos->addRoute('GET', '/create', [EmprestimoController::class, 'create']);
+            $emprestimos->addRoute('POST', '/store', [EmprestimoController::class, 'store']);
+            $emprestimos->addRoute('GET', '/show', [EmprestimoController::class, 'show']);
+            $emprestimos->addRoute('GET', '/edit', [EmprestimoController::class, 'edit']);
+            $emprestimos->addRoute('POST', '/update', [EmprestimoController::class, 'update']);
+            $emprestimos->addRoute('POST', '/delete', [EmprestimoController::class, 'delete']);
         });
 
         // Usuários
