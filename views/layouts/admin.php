@@ -188,13 +188,17 @@ $auth = AuthService::user();
                 <i class="bi bi-box-seam"></i>
                 <span>Livros</span>
             </a>
-            <a class="nav-link" href="/admin/categories" data-page="categories">
+
+            <a class="nav-link" href="/admin/autores" data-page="autores">
                 <i class="bi bi-box-seam"></i>
-                <span>Categorias</span>
-            </a>
+                <span>Autores</span>
             <a class="nav-link" href="/admin/editoras" data-page="editoras">
                 <i class="bi bi-box-seam"></i>
                 <span>Editoras</span>
+            </a>
+            <a class="nav-link" href="/admin/emprestimos" data-page="emprestimos">
+                <i class="bi bi-box-seam"></i>
+                <span>Emprestimos</span>
             </a>
         </nav>
     </aside>
