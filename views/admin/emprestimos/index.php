@@ -13,7 +13,6 @@
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                 <tr>
-                    <th>ID</th>
                     <th>ID Usuário</th>
                     <th>ID Livro</th>
                     <th>Data Empréstimo</th>
@@ -29,7 +28,6 @@
                 foreach ($emprestimos as $emprestimo): 
                 ?>
                     <tr>
-                        <td><?= $this->e($emprestimo->id) ?></td>
                         <td><?= $this->e($emprestimo->id_user) ?></td>
                         <td><?= $this->e($emprestimo->id_livro) ?></td>
                         <td><?= $this->e($emprestimo->data_emprestimo) ?></td>
