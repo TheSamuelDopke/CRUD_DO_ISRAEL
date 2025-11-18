@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Core\Csrf;
 use App\Core\View;
 use App\Repositories\EditoraRepository;
+use App\Repositories\AutorRepository;
 use App\Repositories\LivroRepository;
 use App\Services\LivroService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,6 +18,7 @@ class LivroController
     private LivroRepository $repo;
     private LivroService $service;
     private EditoraRepository $editoraRepo;
+    private AutorRepository $autorRepo;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class LivroController
         $this->repo = new LivroRepository();
         $this->service = new LivroService();
         $this->editoraRepo = new EditoraRepository();
+        $this->autorRepo = new AutorRepository();
     }
 
     public function index(Request $request): Response
@@ -34,14 +37,22 @@ class LivroController
         $livros = $this->repo->paginate($page, $perPage);
         $pages = (int)ceil($total / $perPage);
         $editoras = $this->editoraRepo->getArray();
-        $html = $this->view->render('admin/livros/index', compact('livros', 'page', 'pages', 'editoras'));
+        $autores = $this->autorRepo->getArray();
+        $html = $this->view->render('admin/livros/index', compact(
+            'livros',
+            'page',
+            'pages',
+            'editoras',
+            'autores'
+        ));
         return new Response($html);
     }
 
     public function create(): Response
     {
         $editoras = $this->editoraRepo->findAll();
-        $html = $this->view->render('admin/livros/create', ['csrf' => Csrf::token(), 'errors' => [], 'editoras' => $editoras]);
+        $autores = $this->autorRepo->findAll();
+        $html = $this->view->render('admin/livros/create', ['csrf' => Csrf::token(), 'errors' => [], 'editoras' => $editoras, 'autores' => $autores]);
         return new Response($html);
     }
 
@@ -51,7 +62,8 @@ class LivroController
         $errors = $this->service->validate($request->request->all());
         if ($errors) {
             $editoras = $this->editoraRepo->findAll();
-            $html = $this->view->render('admin/livros/create', ['csrf' => Csrf::token(), 'errors' => $errors, 'old' => $request->request->all(), 'editoras' => $editoras]);
+            $autores = $this->autorRepo->findAll();
+            $html = $this->view->render('admin/livros/create', ['csrf' => Csrf::token(), 'errors' => $errors, 'old' => $request->request->all(), 'editoras' => $editoras, 'autores' => $autores]);
             return new Response($html, 422);
         }
         $livro = $this->service->make($request->request->all());
@@ -68,7 +80,15 @@ class LivroController
         $editoraRepo = new EditoraRepository();
         $editora = $editoraRepo->find($livro['editora_id']);
         $livro['editora_nome'] = $editora['nome'] ?? 'Desconhecida';
-        
+
+        $autorRepo = new AutorRepository();
+        $autor = null;
+
+        if (!empty($livro['autor_id'])) {
+            $autor = $autorRepo->find((int)$livro['autor_id']);
+        }
+
+        $livro['autor_nome'] = $autor['nome_autor'] ?? 'Desconhecido';
         $html = $this->view->render('admin/livros/show', ['livro' => $livro]);
         return new Response($html);
     }
@@ -78,8 +98,9 @@ class LivroController
         $id = (int)$request->query->get('id', 0);
         $livro = $this->repo->find($id);
         $editoras = $this->editoraRepo->findAll();
+        $autores = $this->autorRepo->findAll();
         if (!$livro) return new Response('Livro não encontrado', 404);
-        $html = $this->view->render('admin/livros/edit', ['livro' => $livro, 'csrf' => Csrf::token(), 'errors' => [], 'editoras' => $editoras]);
+        $html = $this->view->render('admin/livros/edit', ['livro' => $livro, 'csrf' => Csrf::token(), 'errors' => [], 'editoras' => $editoras, 'autores' => $autores]);
         return new Response($html);
     }
 
@@ -90,7 +111,8 @@ class LivroController
         $errors = $this->service->validate($data);
         if ($errors) {
             $editoras = $this->editoraRepo->findAll();
-            $html = $this->view->render('admin/livros/edit', ['livro' => array_merge($this->repo->find((int)$data['id']), $data), 'csrf' => Csrf::token(), 'errors' => $errors, 'editoras' => $editoras]);
+            $autores = $this->autorRepo->findAll();
+            $html = $this->view->render('admin/livros/edit', ['livro' => array_merge($this->repo->find((int)$data['id']), $data), 'csrf' => Csrf::token(), 'errors' => $errors, 'editoras' => $editoras, 'autores' => $autores]);
             return new Response($html, 422);
         }
         $livro = $this->service->make($data);

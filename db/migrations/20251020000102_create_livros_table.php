@@ -9,11 +9,13 @@ final class CreateLivrosTable extends AbstractMigration
     {
         $this->table('livros')
             ->addColumn('editora_id', 'integer', ['signed' => false])
+            ->addColumn('autor_id', 'integer', ['signed' => false])
             ->addColumn('titulo', 'string', ['null' => false, 'limit' => 150])
-            ->addColumn('ano_publicacao', 'integer', ['limit' => 4, 'null' => true])
-            ->addColumn('genero', 'string', ['limit' => 50, 'null' => true])
+            ->addColumn('ano_publicacao', 'integer', ['limit' => 4])
+            ->addColumn('genero', 'string', ['limit' => 50])
             ->addColumn('disponivel', 'boolean', ['default' => true])
             ->addForeignKey('editora_id', 'editoras', 'id', ['delete' => 'NO ACTION', 'update' => 'NO ACTION'])
+            ->addForeignKey('autor_id', 'autores', 'id', ['delete' => 'NO ACTION', 'update' => 'NO ACTION'])
             ->create();
     }
 }

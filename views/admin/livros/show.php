@@ -33,6 +33,10 @@
                     <label class="form-label"><strong>Editora:</strong></label>
                     <input type="text" class="form-control" value="<?= $this->e($livro['editora_nome']) ?>" readonly>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Autor:</strong></label>
+                    <input type="text" class="form-control" value="<?= $this->e($livro['autor_nome']) ?>" readonly>
+                </div>
                 <div class="text-end">
                     <a href="javascript:history.back()" class="btn btn-secondary">Voltar</a>
                 </div>
