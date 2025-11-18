@@ -5,12 +5,12 @@
     <?php $this->insert('partials/admin/form/header', ['title' => 'Editar Livro']) ?>
     <div class="card-body">
         <form method="post" action="/admin/livros/update" enctype="multipart/form-data" class="">
-              <input type="hidden" name="id" value="<?= $this->e($livro['id']) ?>">
+            <input type="hidden" name="id" value="<?= $this->e($livro['id']) ?>">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="titulo" class="form-label">Título</label>
                     <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título"
-                           value="<?= $this->e(($livro['titulo'] ?? '')) ?>" required>
+                        value="<?= $this->e(($livro['titulo'] ?? '')) ?>" required>
                     <?php if (!empty($errors['titulo'])): ?>
                         <div class="text-danger"><?= $this->e($errors['titulo']) ?></div><?php endif; ?>
                 </div>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="editora_id" class="form-label">Editora</label>
-                    <select class="form-select" id="editora_id" name="editora_id"  required>
+                    <select class="form-select" id="editora_id" name="editora_id" required>
                         <option value="">Selecione uma editora</option>
                         <?php foreach ($editoras as $editora): ?>
                             <option value="<?= $editora['id'] ?>" <?= $this->e(($old['editora_id'] ?? $livro['editora_id']) == $editora['id'] ? 'selected' : '') ?>>
@@ -54,8 +54,20 @@
                     <?php endif; ?>
                 </div>
                 <div class="col-md-6 mb-3">
-
+                    <label for="autor_id" class="form-label">Autor</label>
+                    <select class="form-select" id="autor_id" name="autor_id" required>
+                        <option value="">Selecione um autor</option>
+                        <?php foreach ($autores as $autor): ?>
+                            <option value="<?= $autor['id'] ?>" <?= $this->e(($old['autor_id'] ?? $livro['autor_id']) == $autor['id'] ? 'selected' : '') ?>>
+                                <?= $this->e($autor['nome_autor']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php if (!empty($errors['autor_id'])): ?>
+                        <div class="error"><?= $this->e($errors['autor_id']) ?></div>
+                    <?php endif; ?>
                 </div>
+            </div>
 
             <div class="d-flex gap-3">
                 <button type="submit" class="btn btn-primary">

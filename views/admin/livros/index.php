@@ -19,6 +19,7 @@
                     <th>Gênero</th>
                     <th>Disponível</th>
                     <th>Editora</th>
+                    <th>Autor</th>
                     <th>Ações</th>
                 </tr>
                 </thead>
@@ -29,8 +30,9 @@
                         <td><?= $this->e($livro['titulo']) ?></td>
                         <td><?= $this->e($livro['ano_publicacao']) ?></td>
                         <td><?= $this->e($livro['genero']) ?></td>
-                        <td><?= $livro['disponivel'] ? 'Sim' : 'Não' ?></td>
-                        <td><?= $this->e($editoras[$livro['editora_id']]) ?></td>
+                        <td><?= $this->e($livro['disponivel'] ? 'Sim' : 'Não') ?></td>
+                        <td><?= $this->e($editoras[$livro['editora_id']] ?? 'Desconhecido') ?></td>
+                        <td><?= $this->e($autores[$livro['autor_id']] ?? 'Desconhecido') ?></td>
                         <td>
                             <div class="action-buttons">
                                 <a class="btn btn-sm btn-secondary btn-edit"

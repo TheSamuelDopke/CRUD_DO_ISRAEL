@@ -7,7 +7,7 @@
         <form method="post" action="/admin/livros/store" enctype="multipart/form-data" class="">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="name" class="form-label">Título</label>
+                    <label for="titulo" class="form-label">Título</label>
                     <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título"
                         value="<?= $this->e(($old['titulo'] ?? '')) ?>" required>
                     <?php if (!empty($errors['titulo'])): ?>
@@ -55,7 +55,18 @@
                     <?php endif; ?>
                 </div>
                 <div class="col-md-6 mb-3">
-
+                        <label for="autor_id" class="form-label">Autor</label>
+                    <select class="form-select" id="autor_id" name="autor_id" required>
+                        <option value="">Selecione um autor</option>
+                        <?php foreach ($autores as $autor): ?>
+                            <option value="<?= $autor['id'] ?>" <?= $this->e(($old['autor_id'] ?? '') == $autor['id'] ? 'selected' : '') ?>>
+                                <?= $this->e($autor['nome_autor']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php if (!empty($errors['autor_id'])): ?>
+                        <div class="error"><?= $this->e($errors['autor_id']) ?></div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="d-flex gap-3">
