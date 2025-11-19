@@ -24,11 +24,11 @@ class AutorRepository
         return $stmt->fetchAll();
     }
 
-    public function find(int $id): ?array
+public function find(int $id): ?array
     {
         $stmt = Database::getConnection()->prepare("SELECT * FROM autores WHERE id = ?");
         $stmt->execute([$id]);
-        $row = $stmt->fetch();
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $row ?: null;
     }
 

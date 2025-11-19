@@ -10,10 +10,10 @@
                     <label for="id_user" class="form-label">Usuário</label>
                     <select class="form-control" id="id_user" name="id_user" required>
                         <option value="">Selecione o Usuário</option>
-                        <?php foreach ($users as $user): // Assumindo que $users é um array com os usuários ?>
+                        <?php foreach ($users as $user): ?>
                             <option value="<?= $this->e($user['id']) ?>"
                                 <?= ($old['id_user'] ?? '') == $user['id'] ? 'selected' : '' ?>>
-                                <?= $this->e($user['nome']) ?>
+                                <?= $this->e($user['name']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -26,7 +26,7 @@
                     <label for="id_livro" class="form-label">Livro</label>
                     <select class="form-control" id="id_livro" name="id_livro" required>
                         <option value="">Selecione o Livro</option>
-                        <?php foreach ($livros as $livro): // Assumindo que $livros é um array com os livros ?>
+                        <?php foreach ($livros as $livro):?>
                             <option value="<?= $this->e($livro['id_livro']) ?>"
                                 <?= ($old['id_livro'] ?? '') == $livro['id_livro'] ? 'selected' : '' ?>>
                                 <?= $this->e($livro['titulo']) ?>

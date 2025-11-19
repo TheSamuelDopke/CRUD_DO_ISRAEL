@@ -103,10 +103,6 @@ class AutorController
              return new RedirectResponse('/admin/autores');
         }
 
-        // A lógica de verificação de associações foi removida conforme sua solicitação,
-        // pois o Autor não possui dependências/associações com outros modelos.
-        
-        // Exclui o autor
         if ($id > 0) {
             $this->repo->delete($id);
             Flash::push("success", "Autor excluído com sucesso!");
