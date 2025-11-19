@@ -6,23 +6,31 @@ use App\Core\Csrf;
 use App\Core\Flash;
 use App\Core\View;
 use App\Repositories\EmprestimoRepository;
-use App\Services\EmprestimoService; // Alterado de AutorService
+use App\Services\EmprestimoService; 
+use App\Repositories\LivroRepository;   
+use App\Repositories\UserRepository;    
+use App\Repositories\AutorRepository; 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-// Renomeado de AutorController para EmprestimoController
 class EmprestimoController
 {
     private View $view;
     private EmprestimoRepository $repo;
-    private EmprestimoService $service; // Usando EmprestimoService
+    private EmprestimoService $service;
+    private UserRepository $userRepo;    
+    private LivroRepository $livroRepo;  
+    private AutorRepository $autorRepo;  
 
     public function __construct()
     {
         $this->view = new View();
         $this->repo = new EmprestimoRepository();
-        $this->service = new EmprestimoService(); // Instancia EmprestimoService
+        $this->service = new EmprestimoService();
+        $this->userRepo = new UserRepository();   
+        $this->livroRepo = new LivroRepository(); 
+        $this->autorRepo = new AutorRepository(); 
     }
 
     public function index(Request $request): Response
@@ -30,18 +38,23 @@ class EmprestimoController
         $page = max(1, (int)$request->query->get('page', 1));
         $perPage = 5;
         $total = $this->repo->countAll();
-        // Variável renomeada para $emprestimos
         $emprestimos = $this->repo->paginate($page, $perPage); 
         $pages = (int)ceil($total / $perPage);
-        // Caminho da view alterado
         $html = $this->view->render('admin/emprestimos/index', compact('emprestimos', 'page', 'pages')); 
         return new Response($html);
     }
 
     public function create(): Response
     {
-        // Caminho da view alterado
-        $html = $this->view->render('admin/emprestimos/create', ['csrf' => Csrf::token(), 'errors' => []]);
+        $users = $this->userRepo->findAll();    
+        $livros = $this->livroRepo->findAll();  
+        
+        $html = $this->view->render('admin/emprestimos/create', [
+            'csrf' => Csrf::token(), 
+            'errors' => [], 
+            'users' => $users,      
+            'livros' => $livros     
+        ]);
         return new Response($html);
     }
 
@@ -52,40 +65,70 @@ class EmprestimoController
         $errors = $this->service->validate($request->request->all());
         
         if ($errors) {
-            // Caminho da view alterado
-            $html = $this->view->render('admin/emprestimos/create', ['csrf' => Csrf::token(), 'errors' => $errors, 'old' => $request->request->all()]);
+            $users = $this->userRepo->findAll();    
+            $livros = $this->livroRepo->findAll();  
+
+            $html = $this->view->render('admin/emprestimos/create', [
+                'csrf' => Csrf::token(), 
+                'errors' => $errors, 
+                'old' => $request->request->all(),
+                'users' => $users,      
+                'livros' => $livros     
+            ]);
             return new Response($html, 422);
         }
         
-        // $emprestimo é o objeto retornado pelo service
         $emprestimo = $this->service->make($request->request->all());
         $id = $this->repo->create($emprestimo);
         
-        // Redirecionamento alterado
         return new RedirectResponse('/admin/emprestimos/show?id=' . $id);
     }
 
     public function show(Request $request): Response
     {
         $id = (int)$request->query->get('id', 0);
-        // Busca o empréstimo pelo ID
         $emprestimo = $this->repo->find($id); 
+        
         if (!$emprestimo) return new Response('Empréstimo não encontrado', 404);
-        // Caminho da view alterado
-        $html = $this->view->render('admin/emprestimos/show', ['emprestimo' => $emprestimo]); 
+        
+        $user = $this->userRepo->find($emprestimo->id_user);
+        $livro = $this->livroRepo->find($emprestimo->id_livro);
+        
+        $autor = null;
+        if ($livro && isset($livro['autor_id'])) {
+            $autor = $this->autorRepo->find($livro['autor_id']);
+        }
+
+        $html = $this->view->render('admin/emprestimos/show', [
+            'emprestimo' => $emprestimo,
+            'user' => $user,     
+            'livro' => $livro,   
+            'autor' => $autor    
+        ]); 
         return new Response($html);
     }
 
     public function edit(Request $request): Response
     {
         $id = (int)$request->query->get('id', 0);
-        // Busca o empréstimo pelo ID
         $emprestimo = $this->repo->find($id); 
+        
+        $users = $this->userRepo->findAll();    
+        $livros = $this->livroRepo->findAll();  
+        
         if (!$emprestimo) return new Response('Empréstimo não encontrado', 404);
-        // Caminho da view alterado
-        $html = $this->view->render('admin/emprestimos/edit', ['emprestimo' => $emprestimo, 'csrf' => Csrf::token(), 'errors' => []]);
+
+        $html = $this->view->render('admin/emprestimos/edit', [
+            'emprestimo' => $emprestimo, 
+            'csrf' => Csrf::token(), 
+            'errors' => [],
+            'users' => $users,      
+            'livros' => $livros     
+        ]);
         return new Response($html);
     }
+
+    
 
     public function update(Request $request): Response
     {
@@ -95,18 +138,24 @@ class EmprestimoController
         $errors = $this->service->validate($data);
         
         if ($errors) {
-            // Caminho da view alterado
-            $html = $this->view->render('admin/emprestimos/edit', ['emprestimo' => array_merge((array)$this->repo->find((int)$data['id']), $data), 'csrf' => Csrf::token(), 'errors' => $errors]);
+            $users = $this->userRepo->findAll();    
+            $livros = $this->livroRepo->findAll();  
+            
+            $html = $this->view->render('admin/emprestimos/edit', [
+                'emprestimo' => array_merge((array)$this->repo->find((int)$data['id']), $data), 
+                'csrf' => Csrf::token(), 
+                'errors' => $errors,
+                'users' => $users,      
+                'livros' => $livros     
+            ]);
             return new Response($html, 422);
         }
         
-        // Cria o objeto Emprestimo
         $emprestimo = $this->service->make($data);
         if (!$emprestimo->id) return new Response('ID inválido', 422);
         
         $this->repo->update($emprestimo);
         
-        // Redirecionamento alterado
         return new RedirectResponse('/admin/emprestimos/show?id=' . $emprestimo->id);
     }
 

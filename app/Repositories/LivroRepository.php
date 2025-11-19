@@ -18,21 +18,44 @@ class LivroRepository {
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    public function find(int $id): ?array {
+
+
+    public function find(int $id): ?array
+    {
         $stmt = Database::getConnection()->prepare("SELECT * FROM livros WHERE id = ?");
         $stmt->execute([$id]);
-        $row = $stmt->fetch();
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $row ?: null;
     }
+
     public function create(Livro $p): int {
-        $stmt = Database::getConnection()->prepare("INSERT INTO livros (editora_id, titulo, ano_publicacao, genero, disponivel) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$p->editora_id, $p->titulo, $p->ano_publicacao, $p->genero, $p->disponivel]);
+        // CORREÇÃO: Adicionando 'autor_id' no INSERT e nos valores.
+        $stmt = Database::getConnection()->prepare("INSERT INTO livros (editora_id, autor_id, titulo, ano_publicacao, genero, disponivel) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $p->editora_id, 
+            $p->autor_id, // Campo 'autor_id' adicionado
+            $p->titulo, 
+            $p->ano_publicacao, 
+            $p->genero, 
+            $p->disponivel
+        ]);
         return (int)Database::getConnection()->lastInsertId();
     }
+    
     public function update(Livro $p): bool {
-        $stmt = Database::getConnection()->prepare("UPDATE livros SET editora_id = ?, titulo = ?, ano_publicacao = ?, genero = ?, disponivel = ? WHERE id = ?");
-        return $stmt->execute([$p->editora_id, $p->titulo, $p->ano_publicacao, $p->genero, $p->disponivel, $p->id]);
+        // CORREÇÃO: Adicionando 'autor_id' no UPDATE e nos valores.
+        $stmt = Database::getConnection()->prepare("UPDATE livros SET editora_id = ?, autor_id = ?, titulo = ?, ano_publicacao = ?, genero = ?, disponivel = ? WHERE id = ?");
+        return $stmt->execute([
+            $p->editora_id, 
+            $p->autor_id, // Campo 'autor_id' adicionado
+            $p->titulo, 
+            $p->ano_publicacao, 
+            $p->genero, 
+            $p->disponivel, 
+            $p->id
+        ]);
     }
+    
     public function delete(int $id): bool {
         $stmt = Database::getConnection()->prepare("DELETE FROM livros WHERE id = ?");
         return $stmt->execute([$id]);
@@ -43,4 +66,10 @@ class LivroRepository {
         $row = $stmt->fetch();
         return $row ?: [];
     }
+
+    public function findAll(): array {
+    $stmt = Database::getConnection()->prepare("SELECT id AS id_livro, titulo FROM livros ORDER BY titulo ASC");
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
 }

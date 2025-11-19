@@ -10,9 +10,9 @@ class Livro
     public ?string $genero;
     public bool $disponivel;
     public int $editora_id;
-    public int $autor_id;
+    public ?int $autor_id;
 
-    public function __construct(?int $id, string $titulo, ?int $ano_publicacao, ?string $genero, bool $disponivel, int $editora_id, int $autor_id)
+    public function __construct(?int $id, string $titulo, ?int $ano_publicacao, ?string $genero, bool $disponivel, int $editora_id, ?int $autor_id)
     {
         $this->id = $id;
         $this->titulo = $titulo;

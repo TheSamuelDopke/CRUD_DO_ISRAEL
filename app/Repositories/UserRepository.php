@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repositories;
 
 use App\Core\Database;
@@ -7,6 +6,14 @@ use App\Models\User;
 
 class UserRepository
 {
+    // Método findAll para preencher o select (CORRIGIDO para usar 'name')
+    public function findAll(): array 
+    {
+        $stmt = Database::getConnection()->prepare("SELECT id, name FROM users ORDER BY name ASC");
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC); 
+    }
+    
     public function countAll(): int
     {
         $stmt = Database::getConnection()->query("SELECT COUNT(*) FROM users");
@@ -23,11 +30,12 @@ class UserRepository
         return $stmt->fetchAll();
     }
 
+    // MÉTODO FIND CORRIGIDO para retornar array associativo
     public function find(int $id): ?array
     {
         $stmt = Database::getConnection()->prepare("SELECT * FROM users WHERE id = ?");
         $stmt->execute([$id]);
-        $row = $stmt->fetch();
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $row ?: null;
     }
 
